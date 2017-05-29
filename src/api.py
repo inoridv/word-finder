@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
+import requests
 
 # Initialize the api.
 app = Flask(__name__)
@@ -22,6 +23,20 @@ class OccurrencesCrawler(Resource):
 
         # Initialize the function result.
         result = {}
+
+         # Request the given page and handle errors.
+        try :
+            webpage = requests.get(url)
+        except requests.exceptions.RequestException as e:
+            result["message"] = {"url" : str(e)}
+            return result, 400
+
+        if r.status_code == 404:
+        	result["message"] = {"url" : "Given page was not found."}
+        	return result, 400
+        # Get page content.
+
+
         return result
 
 if __name__ == '__main__':
