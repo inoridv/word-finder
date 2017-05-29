@@ -32,7 +32,7 @@ class OccurrencesCrawler(Resource):
             result["message"] = {"url" : str(e)}
             return result, 400
 
-        if r.status_code == 404:
+        if webpage.status_code == 404:
         	result["message"] = {"url" : "Given page was not found."}
         	return result, 400
         # Get page content.
@@ -55,7 +55,7 @@ class OccurrencesCrawler(Resource):
         	result["result"] = {"occurrences" : 0}
         	return result, 200
 
-        result["result"] = {"occurrences" : occurrences}
+        result["result"] = {"occurrences" : len(occurrences)}
         return result, 200
 
 if __name__ == '__main__':
