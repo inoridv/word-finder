@@ -25,7 +25,7 @@ class OccurrencesCrawler(Resource):
         # Initialize the function result.
         result = {}
 
-                 # Request the given page and handle errors.
+        # Request the given page and handle errors.
         try :
             webpage = requests.get(url)
         except requests.exceptions.RequestException as e:
@@ -59,4 +59,4 @@ class OccurrencesCrawler(Resource):
         return result, 200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
