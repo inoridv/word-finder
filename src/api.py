@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Resource, Api, reqparse
-import requests
+from bs4 import BeautifulSoup
+import requests, re
 
 # Initialize the api.
 app = Flask(__name__)
@@ -24,7 +25,7 @@ class OccurrencesCrawler(Resource):
         # Initialize the function result.
         result = {}
 
-         # Request the given page and handle errors.
+                 # Request the given page and handle errors.
         try :
             webpage = requests.get(url)
         except requests.exceptions.RequestException as e:
@@ -35,9 +36,27 @@ class OccurrencesCrawler(Resource):
         	result["message"] = {"url" : "Given page was not found."}
         	return result, 400
         # Get page content.
+        soup = BeautifulSoup(webpage.text)
 
+        # Only the content in the body should be considered.
+        content = soup.body.extract()
 
-        return result
+        # Remove all HTML tags whose content might result in a false positive.
+        [element.decompose() for element in content(['style', 'script', '[document]', 'head', 'title'])]
+
+        # Gather the text without HTML Tags and convert it to lowercase.
+        pagetext = content.get_text().lower()
+
+        # Search for the occurrences of the given word using regex.
+        occurrences = [needle.start() for needle in re.finditer(str(word).lower(), pagetext)]
+
+        # Return the occurrences found.
+        if not occurrences:
+        	result["result"] = {"occurrences" : 0}
+        	return result, 200
+
+        result["result"] = {"occurrences" : occurrences}
+        return result, 200
 
 if __name__ == '__main__':
     app.run(debug=True)
