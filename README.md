@@ -1,5 +1,6 @@
 # word-finder
 Python3 API developed using [Flask](http://flask.pocoo.org/), [Flask-Restful](https://flask-restful.readthedocs.io/en/0.3.5/) &amp; [BeautifulSoup4](https://www.crummy.com/software/BeautifulSoup/). It contains a function that returns the amount of occurrences of a word in a given web page. This method wil crawl the page and it only searches for the word in the visible content of the page(the <body> tag), ignoring any other occurrence that might be in the page's metadata or scripts/style tags. You can think of it as an immitation of the "CTRL+F" command.
+Automated tests were developed using [PyTest](https://docs.pytest.org/en/latest/) and can be found in the tests folder.
 
 ### /v1/occurrences
 Endpoint for the crawl function.
